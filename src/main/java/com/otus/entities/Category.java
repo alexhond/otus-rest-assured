@@ -3,6 +3,14 @@ package com.otus.entities;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Category {
+  public Category() {
+  }
+
+  public Category(int id, String name) {
+    this.id = id;
+    this.name = name;
+  }
+
   @JsonProperty("id")
   public int getId() {
     return this.id;

@@ -3,8 +3,9 @@ package com.otus.entities;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
+import java.util.Objects;
 
-public class Store {
+public class Store extends CommonPetStoreObject{
   @JsonProperty("id")
   public int getId() {
     return this.id;
@@ -70,4 +71,17 @@ public class Store {
   }
 
   boolean complete;
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Store)) return false;
+    Store store = (Store) o;
+    return getId() == store.getId() && getPetId() == store.getPetId() && getQuantity() == store.getQuantity() && getComplete() == store.getComplete() && getShipDate().equals(store.getShipDate()) && getStatus().equals(store.getStatus());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getId(), getPetId(), getQuantity(), getShipDate(), getStatus(), getComplete());
+  }
 }
