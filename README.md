@@ -13,7 +13,7 @@ Rest-assured
 
 Критерии оценки:
 +2 есть тест кейсы
-+2 используется RequestSpecification или ResponceSpecification
++2 используется RequestSpecification или ResponseSpecification
 +3 не менее 2-х тестов на первый метод
 +3 не менее 2-х тестов на второй метод
 

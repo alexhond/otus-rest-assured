@@ -12,7 +12,7 @@ import io.restassured.specification.ResponseSpecification;
 import static io.restassured.RestAssured.given;
 
 public class RestUtils {
-  private static final String baseUrl = "https://petstore.swagger.io/";
+  private static final String baseUrl = "https://petstore.swagger.io/v2";
 
   static RequestSpecification requestSpecification = new RequestSpecBuilder()
       .setContentType(ContentType.JSON)
@@ -34,8 +34,16 @@ public class RestUtils {
     return postValidatableResponse(requestObject, endPoint);
   }
 
-  public static ValidatableResponse sendGet(String endPoint, int id) {
-    return getValidatableResponse(endPoint, id);
+  public static ValidatableResponse sendGet(String endPoint, String name) {
+    return getValidatableResponse(endPoint, name);
+  }
+
+  public static ValidatableResponse sendPut(Object req, String endPoint, String name) {
+    return putValidatableResponse(req, endPoint, name);
+  }
+
+  public static ValidatableResponse sendPut(Object req, String endPoint) {
+    return putValidatableResponse(req, endPoint);
   }
 
   public static ValidatableResponse sendPost(String requestObject, String endPoint) {
@@ -49,17 +57,29 @@ public class RestUtils {
     return given(requestSpecification)
         .body(requestObject)
         .baseUri(baseUrl)
-        .basePath("#/" + path)
+        .basePath(path)
         .when().post()
         .then().spec(responseSpecification);
   }
 
-  private static ValidatableResponse getValidatableResponse(String endPoint, int id) {
-    String uri = baseUrl + "/" + endPoint + "/" + id;
+  private static ValidatableResponse getValidatableResponse(String endPoint, String name) {
+    String uri = baseUrl + "/" + endPoint + "/" + name;
 
     return given(requestSpecification)
         .baseUri(uri)
         .when().get()
+        .then().spec(responseSpecification);
+  }
+
+  private static ValidatableResponse putValidatableResponse(Object requestObject, String endPoint, String... name) {
+    String idRequest = name.length == 0 ? "" : "/" + name[0];
+    String path = endPoint + "/" + idRequest;
+
+    return given(requestSpecification)
+        .body(requestObject)
+        .baseUri(baseUrl)
+        .basePath(path)
+        .when().put()
         .then().spec(responseSpecification);
   }
 }

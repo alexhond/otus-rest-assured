@@ -12,8 +12,16 @@ public class PetSteps {
     return RestUtils.sendPost(request, endPoints.getEndPointName()).extract().response();
   }
 
-  public static Response getResponse(int id, EndPoints endPoints) {
-    return RestUtils.sendGet(endPoints.getEndPointName(), id).extract().response();
+  public static Response getResponse(String name, EndPoints endPoints) {
+    return RestUtils.sendGet(endPoints.getEndPointName(), name).extract().response();
+  }
+
+  public static Response putResponse(CommonPetStoreObject request, String name, EndPoints endPoints) {
+    return RestUtils.sendPut(request, endPoints.getEndPointName(), name).extract().response();
+  }
+
+  public static Response putResponse(CommonPetStoreObject request, EndPoints endPoints) {
+    return RestUtils.sendPut(request, endPoints.getEndPointName()).extract().response();
   }
 
   public static void checkStatus(Response response, int statusCode) {
