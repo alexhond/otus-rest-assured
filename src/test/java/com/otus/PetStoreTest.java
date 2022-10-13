@@ -26,7 +26,7 @@ public class PetStoreTest {
    */
   @Test
   @DisplayName("Add a new user")
-  void testAddNewUser() {
+  void testAddNewUserAndCheckUserSuccess() {
     User user = new User(
         1337, "Pepl", "Peplov", "Peplovich",
         "mailmail", "pass", "12345678", 200);
@@ -35,6 +35,8 @@ public class PetStoreTest {
 
     Response responseGet = RestSteps.getResponse("Pepl", EndPoints.USER);
     RestSteps.checkStatus(responseGet, 200);
+
+    RestSteps.validateJsonSchema(responseGet, "json-schema/user-schema.json");
 
     RestSteps.compareObjects(responseGet, user);
   }
@@ -63,7 +65,7 @@ public class PetStoreTest {
    */
   @Test
   @DisplayName("Add a new pet")
-  void testAddNewPet() {
+  void testAddNewPetAndCheckPetSuccess() {
     List<String> photourls = new ArrayList<>();
     photourls.add("adssa");
     photourls.add("ddd");
@@ -76,6 +78,8 @@ public class PetStoreTest {
     RestSteps.checkStatus(responsePost, 200);
 
     Response responseGet = RestSteps.getResponse("133", EndPoints.PET);
+    RestSteps.validateJsonSchema(responseGet, "json-schema/pet-schema.json");
+
     RestSteps.checkStatus(responseGet, 200);
   }
 
