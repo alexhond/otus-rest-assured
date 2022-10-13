@@ -6,6 +6,8 @@ import com.otus.utils.RestUtils;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+
 public class RestSteps {
 
   public static Response postResponse(CommonObject request, EndPoints endPoints) {
@@ -31,6 +33,9 @@ public class RestSteps {
   public static void compareObjects(Response actual, CommonObject expected) {
     CommonObject actualResponse = actual.as(expected.getClass());
     Assertions.assertEquals(expected, actualResponse);
+  }
 
+  public static void validateJsonSchema(Response actual, String path) {
+    actual.then().body(matchesJsonSchemaInClasspath(path));
   }
 }
