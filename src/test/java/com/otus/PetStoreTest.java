@@ -6,15 +6,8 @@ import com.otus.entities.Category;
 import com.otus.entities.Pet;
 import com.otus.entities.Tag;
 import com.otus.entities.User;
-import com.otus.steps.PetSteps;
-import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.builder.ResponseSpecBuilder;
-import io.restassured.filter.log.LogDetail;
-import io.restassured.http.ContentType;
+import com.otus.steps.RestSteps;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
-import io.restassured.specification.ResponseSpecification;
-import junit.framework.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,17 +26,17 @@ public class PetStoreTest {
    */
   @Test
   @DisplayName("Add a new user")
-  void test1() {
+  void testAddNewUser() {
     User user = new User(
         1337, "Pepl", "Peplov", "Peplovich",
         "mailmail", "pass", "12345678", 200);
-    Response responsePost = PetSteps.postResponse(user, EndPoints.USER);
-    PetSteps.checkStatus(responsePost, 200);
+    Response responsePost = RestSteps.postResponse(user, EndPoints.USER);
+    RestSteps.checkStatus(responsePost, 200);
 
-    Response responseGet = PetSteps.getResponse("Pepl", EndPoints.USER);
-    PetSteps.checkStatus(responseGet, 200);
+    Response responseGet = RestSteps.getResponse("Pepl", EndPoints.USER);
+    RestSteps.checkStatus(responseGet, 200);
 
-    PetSteps.compareObjects(responseGet, user);
+    RestSteps.compareObjects(responseGet, user);
   }
 
   /**
@@ -52,15 +45,15 @@ public class PetStoreTest {
    */
   @Test
   @DisplayName("Update user")
-  void test2() {
+  void testUpdateUser() {
     User user = new User(
         1337, "NewPepl", "Peplov", "Peplovich",
         "mailmail", "pass", "12345678", 200);
-    Response responsePost = PetSteps.putResponse(user, "username", EndPoints.USER);
-    PetSteps.checkStatus(responsePost, 200);
+    Response responsePost = RestSteps.putResponse(user, "username", EndPoints.USER);
+    RestSteps.checkStatus(responsePost, 200);
 
-    Response responseGet = PetSteps.getResponse("NewPepl", EndPoints.USER);
-    PetSteps.checkStatus(responseGet, 200);
+    Response responseGet = RestSteps.getResponse("NewPepl", EndPoints.USER);
+    RestSteps.checkStatus(responseGet, 200);
     Assertions.assertEquals("NewPepl", responseGet.then().extract().as(User.class).getUsername());
   }
 
@@ -70,7 +63,7 @@ public class PetStoreTest {
    */
   @Test
   @DisplayName("Add a new pet")
-  void test3() {
+  void testAddNewPet() {
     List<String> photourls = new ArrayList<>();
     photourls.add("adssa");
     photourls.add("ddd");
@@ -79,11 +72,11 @@ public class PetStoreTest {
     Pet pet = new Pet(
         133, new Category(2, "asd"), "newPet", photourls, tags, "status"
     );
-    Response responsePost = PetSteps.postResponse(pet, EndPoints.PET);
-    PetSteps.checkStatus(responsePost, 200);
+    Response responsePost = RestSteps.postResponse(pet, EndPoints.PET);
+    RestSteps.checkStatus(responsePost, 200);
 
-    Response responseGet = PetSteps.getResponse("133", EndPoints.PET);
-    PetSteps.checkStatus(responseGet, 200);
+    Response responseGet = RestSteps.getResponse("133", EndPoints.PET);
+    RestSteps.checkStatus(responseGet, 200);
   }
 
   /**
@@ -92,7 +85,7 @@ public class PetStoreTest {
    */
   @Test
   @DisplayName("Update pet")
-  void test4() {
+  void testUpdatePet() {
     List<String> photourls = new ArrayList<>();
     photourls.add("adssa");
     photourls.add("ddd");
@@ -101,11 +94,11 @@ public class PetStoreTest {
     Pet pet = new Pet(
         444, new Category(2, "asd"), "newPet", photourls, tags, "status"
     );
-    Response responsePost = PetSteps.putResponse(pet, EndPoints.PET);
-    PetSteps.checkStatus(responsePost, 200);
+    Response responsePost = RestSteps.putResponse(pet, EndPoints.PET);
+    RestSteps.checkStatus(responsePost, 200);
 
-    Response responseGet = PetSteps.getResponse("444", EndPoints.PET);
-    PetSteps.checkStatus(responseGet, 200);
+    Response responseGet = RestSteps.getResponse("444", EndPoints.PET);
+    RestSteps.checkStatus(responseGet, 200);
     Assertions.assertEquals(444, responseGet.then().extract().as(Pet.class).getId());
   }
 }
