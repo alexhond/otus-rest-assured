@@ -16,6 +16,8 @@
         <selenium.java.version>3.141.59</selenium.java.version>
         <junit.version>5.8.1</junit.version>
         <faker.version>1.0.1</faker.version>
+        <includeTags/>
+        <aspectj.version>1.8.10</aspectj.version>
 
         <forkCount>1</forkCount>
         <reuseForks>true</reuseForks>
@@ -55,13 +57,6 @@
             <version>${selenium.java.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.junit</groupId>
-            <artifactId>junit-bom</artifactId>
-            <version>5.8.1</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-        <dependency>
             <groupId>com.github.javafaker</groupId>
             <artifactId>javafaker</artifactId>
             <version>${faker.version}</version>
@@ -85,16 +80,6 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j-api.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.inject</groupId>
-            <artifactId>guice</artifactId>
-            <version>${guice.version}</version>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
@@ -121,7 +106,11 @@
             <artifactId>allure-maven</artifactId>
             <version>${allure-maven.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-junit5</artifactId>
+            <version>2.19.0</version>
+        </dependency>
     </dependencies>
 
     <profiles>
@@ -157,6 +146,27 @@
                     <threadCountMethods>${thread.count}</threadCountMethods>
                     <testFailureIgnore>false</testFailureIgnore>
 
+                    <properties>
+                        <property>
+                            <name>listener</name>
+                            <value>io.qameta.allure.junit5.AllureJunit5</value>
+                        </property>
+                    </properties>
+                    <argLine>
+                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                    </argLine>
+
+                    <systemProperties>
+                        <property>
+                            <name>allure.results.directory</name>
+                            <value>${project.build.directory}/allure-results</value>
+                        </property>
+                        <property>
+                            <name>junit.jupiter.extensions.autodetection.enabled</name>
+                            <value>true</value>
+                        </property>
+                    </systemProperties>
+
                     <systemPropertyVariables>
                         <browser>${browser}</browser>
                         <webdriver.timeouts.implicitlywait>${webdriver.timeouts.implicitlywait}
@@ -165,8 +175,16 @@
                         <test.project.status>test</test.project.status>
                         <test.project.language>${test.project.language}</test.project.language>
                         <base.url>${base.url}</base.url>
+                        <includeTags>${includeTags}</includeTags>
                     </systemPropertyVariables>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjweaver</artifactId>
+                        <version>${aspectj.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -198,6 +216,16 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>2.11.2</version>
+                <configuration>
+                    <reportVersion>2.17.2</reportVersion>
+                    <resultsDirectory>${project.build.directory}/allure-results</resultsDirectory>
+                    <reportDirectory>${project.build.directory}/allure-report</reportDirectory>
+                </configuration>
             </plugin>
         </plugins>
     </build>
