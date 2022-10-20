@@ -17,6 +17,7 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 
+@org.junit.jupiter.api.Tag("@rest")
 public class PetStoreTest {
 
   /**
